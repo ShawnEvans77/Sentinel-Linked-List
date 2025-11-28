@@ -1,20 +1,20 @@
 import java.util.*;
-public class SentinelDList implements Iterable<String> {
+public class SentinelLinkedList<E> implements Iterable<E> {
 
-    private static class DListNode {
-        public String data;
-        public DListNode next;
-        public DListNode previous;
+    private static class DListNode<E> {
+        public E data;
+        public DListNode<E> next;
+        public DListNode<E> previous;
     }
 
-    private DListNode nil;
+    private DListNode<E> nil;
     private int size;
 
     /**
      * Creates an empty Sentinel Doubly Linked List.
      */
-    public SentinelDList() { //The Empty List.
-        nil = new DListNode(); //The Sentinel Node. 
+    public SentinelLinkedList() { //The Empty List.
+        nil = new DListNode<>(); //The Sentinel Node. 
         nil.previous = nil; //In the empty list, the sentinel node's previous is itself. "nil.previous" is the tail.
         nil.next = nil; //In the empty list, the sentinel node's next is itself. "nil.next" is the head.
 
@@ -26,10 +26,10 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Adds an element to the front of the Sentinel Doubly Linked List
-     * @param elem The {@code String} to be added to the front of the Sentinel Doubly Linked List.
+     * @param elem The element to be added to the front of the Sentinel Doubly Linked List.
      */
-    public void addFirst(String elem) {
-        DListNode newNode = new DListNode(); //Make a new Node.
+    public void addFirst(E elem) {
+        DListNode<E> newNode = new DListNode<>(); //Make a new Node.
         newNode.data = elem; //Set the data of the new node to the method parameter.
 
         newNode.previous = nil; //Set the previous of the new node to "nil." As this newnode will be the head, what comes before the head? nil.
@@ -44,10 +44,10 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Adds an element to the end of the Sentinel Doubly Linked List
-     * @param elem The {@code String} to be added to the end of the Sentinel Doubly Linked List.
+     * @param elem The element to be added to the end of the Sentinel Doubly Linked List
      */
-    public void addLast(String elem) {
-        DListNode newNode = new DListNode(); //Make a new Node.
+    public void addLast(E elem) {
+        DListNode<E> newNode = new DListNode<>(); //Make a new Node.
         newNode.data = elem; //Set its data to the method parameter.
         
         newNode.previous = nil.previous; //Set the previous of the newnode to nil.previous ---- also known as the "tail."
@@ -62,10 +62,10 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Returns the first element of the Doubly Linked List.
-     * @return The {@code String} at the 'head' of the Doubly Linked List, also known as {@code nil.next}.
+     * @return The element at the 'head' of the Doubly Linked List, also known as {@code nil.next}.
      * @throws NoSuchElementException If the list is of size 0.
      */
-    public String getFirst() {
+    public E getFirst() {
         if (size == 0) 
             throw new NoSuchElementException("cannot invoke getFirst() because list is empty");
 
@@ -74,10 +74,10 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Returns the last element of the Doubly Linked List.
-     * @return The {@code String} at the 'head' of the Doubly Linked List, also known as {@code nil.previous}.
+     * @return The element at the 'head' of the Doubly Linked List, also known as {@code nil.previous}.
      * @throws NoSuchElementException If the list is empty.
      */
-    public String getLast() {
+    public E getLast() {
         if (size == 0)
             throw new NoSuchElementException("cannot invoke getLast() because list is empty");
         
@@ -87,19 +87,19 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Removes the front element or 'head' of the Doubly Linked List, then returns it.
-     * @return The {@code String} that was at the beginning of the Linked List prior to the call of removeFirst().
+     * @return The element that was at the beginning of the Linked List prior to the call of removeFirst().
      * @throws NoSuchElementException If the list is empty.
      */
-    public String removeFirst() {
+    public E removeFirst() {
         if (size == 0)
             throw new NoSuchElementException("cannot invoke removeFirst() because list is empty");
         
-        DListNode old = nil.next;
+        DListNode<E> old = nil.next;
 
         nil.next = nil.next.next; //Basically, "head = head.next." In the list of size 1, this is like "nil.next = nil."
         //How do I remove the head? I make the new head the thing after it.
         nil.next.previous = nil; //Basically, "head.previous = null." Making the previous of this new head null. In the list of size 1, this is like "nil.previous = nil."
-        //No error checking done as the above logic flow works in list of size 1.
+        //No error checking done as the above logic flow works in list of size 1
 
         size--;
         return old.data;
@@ -107,19 +107,19 @@ public class SentinelDList implements Iterable<String> {
 
     /**
      * Removes the last element or 'tail' of the Doubly Linked List, then returns it. 
-     * @return The {@code String} that was at the end of the Linked List prior to the call of removeLast().
+     * @return The element that was at the end of the Linked List prior to the call of removeLast().
      * @throws NoSuchElementException If the list is empty.
      */
-    public String removeLast() {
+    public E removeLast() {
         if (size == 0)
             throw new NoSuchElementException("cannot invoke removeLast() because list is empty");
         
-        DListNode old = nil.previous;
+        DListNode<E> old = nil.previous;
 
         nil.previous = nil.previous.previous; //Basically, "tail = tail.previous." In list of size 1, this is like "nil.previous = nil."
         //How do I remove the tail? I make the new tail the thing before it.
-        nil.previous.next = nil; //Basically, "tail.next = null." Making the next of this new tail nill. In the list of size 1, this is like "nil.next = nil.""
-        //No error checking done as the above logic flow works in the list of size 1.
+        nil.previous.next = nil; //Basically, "tail.next = null." Making the next of this new tail null. In the list of size 1, this is like "nil.next = nil.""
+        //No error checking done as the above logic flow works in the list of size
 
         size--;
         return old.data;
@@ -128,14 +128,14 @@ public class SentinelDList implements Iterable<String> {
     /**
      * Returns the value at the specified index. 
      * @param index The {@code int} representing the index to look for and return.
-     * @return The {@code String} at the specified index.
+     * @return The element at the specified index.
      * @throws IndexOutOfBoundsException If the index is out of range ( {@code < 0} or {@code >= size()} ).
      */
-    public String get(int index) {
+    public E get(int index) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("index " + index + " out of bounds for length " + size);
         
-        DListNode pointer = nil.next;
+        DListNode<E> pointer = nil.next;
         int count = 0;
 
         while (count < index) {
@@ -149,15 +149,14 @@ public class SentinelDList implements Iterable<String> {
     /**
      * Changes the value at a specified index, and returns the value previously at that index.
      * @param index The {@code int} representing the index to change.
-     * @param value The {@code String} to be placed at the specified index.
+     * @param value The element to be placed at the specified index.
      * @return The value previously at the {@code int} <STRONG>index</STRONG> parameter before the call of set().
-     * @throws IndexOutOfBoundsException If the index is out of range {@code < 0} or {@code >= size()} ).
      */
-    public String set(int index, String value) {
+    public E set(int index, E value) {
         if (index < 0 || index >= size)
             throw new IndexOutOfBoundsException("index " + index + " out of bounds for length " + size);
         
-        DListNode pointer = nil.next; //A pointer starting at nil.next (the head) that will walk to the specified index.
+        DListNode<E> pointer = nil.next; //A pointer starting at nil.next (the head) that will walk to the specified index.
         int count = 0; //A counter that will help determine when we arrive at the index.
 
         while (count < index) {
@@ -165,9 +164,28 @@ public class SentinelDList implements Iterable<String> {
             pointer = pointer.next;
         }
 
-        String old = pointer.data;
+        E old = pointer.data;
         pointer.data = value;
         return old;
+    }
+
+    /**
+     * Returns a string representation of the given Sentinel Linked List.
+     */
+    @Override
+    public String toString() {
+        DListNode<E> pointer = nil.next;
+        StringBuilder result = new StringBuilder("[");
+
+        while (pointer != nil) {
+            result.append(pointer.data);
+            result.append(pointer.next == nil ? "" : ", ");
+            pointer = pointer.next;
+        }
+
+        result.append("]");
+
+        return result.toString();
     }
 
     /**
@@ -176,7 +194,7 @@ public class SentinelDList implements Iterable<String> {
      * @return {@code true} if the object is in the list, {@code false} if it does not.
      */
     public boolean contains(Object obj) {
-        DListNode pointer = nil.next; //A pointer starting at nil.next (the head) that will continue until the end of the list.
+        DListNode<E> pointer = nil.next; //A pointer starting at nil.next (the head) that will continue until the end of the list.
 
         while (pointer != nil) { //If the pointer has made it to nil, then it has reached the end of the list.
             if (pointer.data.equals(obj)) { //If the pointer's data is same as the parameter, return true.
@@ -203,14 +221,14 @@ public class SentinelDList implements Iterable<String> {
      */
 
     public int indexOf(Object obj) {
-        DListNode pointer = nil.next;
-        int index = 0; //Counter to represent the index of the object.
+        DListNode<E> pointer = nil.next;
+        int index = 0;
 
-        while (pointer != nil) {
-            if (pointer.data.equals(obj)) { //Similar to contains.
-                return index; //Return the index of the object.
+        while (pointer != nil) { //While the pointer has not reached the end of the list.
+            if (pointer.data.equals(obj)) { //If the pointer's data equals the method parameter.
+                return index; //Return the current index.
             }
-            index++; //Increment the index counter.
+            index++;
             pointer = pointer.next;
         }
 
@@ -218,18 +236,26 @@ public class SentinelDList implements Iterable<String> {
     }
 
     /**
+     * Returns true if this list is empty, false otherwise. 
+     * @return A {@code boolean} representing if this list is empty.
+     */
+    public boolean isEmpty() {
+        return size == 0;
+    }
+
+    /**
      * An iterator to be used on Sentinel Doubly Linked Lists. 
      * It uses a pointer that starts at {@code nil.next}, or the 'head' of the List.
      */
-    private class DListIterator implements Iterator<String> {
-        private DListNode pointer;
+    private class SentinelLinkedListIterator implements Iterator<E> {
+        private DListNode<E> pointer;
    
-        public DListIterator() {
+        public SentinelLinkedListIterator() {
             pointer = nil.next;
         }
 
-        public String next() {
-            String curr = pointer.data;
+        public E next() {
+            E curr = pointer.data;
             pointer = pointer.next;
             return curr;
         }
@@ -239,7 +265,8 @@ public class SentinelDList implements Iterable<String> {
         }
     }
 
-    public Iterator<String> iterator() {
-        return new DListIterator();
+    public Iterator<E> iterator() {
+        return new SentinelLinkedListIterator();
     }
+
 }
